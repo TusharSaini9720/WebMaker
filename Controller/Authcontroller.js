@@ -119,7 +119,7 @@ exports.forgotPassword = async (req, res) => {
   // const resetURL = `${req.protocol}://${req.get(
   //   "host"
   // )}/resetPassword/${resetToken}`;
-  const resetURL=`http://localhost:3001/resetPassword/${resetToken}`
+  const resetURL=`https://webmaker-9smd.onrender.com/resetPassword/${resetToken}`
   const message = `Forgot your password? Submit a patch request with your new password with confirmPassword to: 
     ${resetURL}\n If you did't forgot your password, please ignore this email`;
     // console.log("resetURL", resetURL)
