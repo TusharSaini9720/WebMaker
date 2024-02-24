@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "frontend":"npm start --prifix ./frontend",
+    "div":"concurrently\"npm start\"\"npm run frontend\""
   },
   "author": "tushar",
   "license": "ISC",
