@@ -30,7 +30,7 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 const signToken = id => {
-  console.log("process.env.JWT_SECRET ",process.env.JWT_SECRET);
+ 
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
@@ -45,10 +45,10 @@ exports.signup = async (req, res) => {
       confirmPassword: req.body.confirmPassword,
     });
     // console.log("newUser",newUser);
-     console.log("in signup");
+   //  console.log("in signup");
     createSendToken(newUser, 201, res);
   } catch (err) {
-     console.log("in err");
+     //console.log("in err");
     res.status(200).json({
       status: "failed",
       message: err + "",
@@ -118,15 +118,15 @@ exports.forgotPassword = async (req, res) => {
   //3.sending token to user's email
   // const resetURL = `${req.protocol}://${req.get(
   //   "host"
-  // )}/api/v1/users/resetPassword/${resetToken}`;
+  // )}/resetPassword/${resetToken}`;
   const resetURL=`http://localhost:3001/resetPassword/${resetToken}`
   const message = `Forgot your password? Submit a patch request with your new password with confirmPassword to: 
     ${resetURL}\n If you did't forgot your password, please ignore this email`;
     // console.log("resetURL", resetURL)
     // console.log("message",message)
-
+      
   try {
-    console.log("in try em")
+   
     await sendEmail({
       email: user.email,
       subject: "Your password reset token (valid for 10 minutes)",
@@ -408,12 +408,12 @@ exports.protect = async (req, res, next) => {
   }
   //5. grant permission to access
   req.user = freshUser;
- console.log("protected");
+ 
   next();
 };
 exports.sendEmail = async (req, res) => {
   try {
-    console.log("req",req.body);
+    
     await sendEmail({
       email: process.env.EMAIL_RECEIVER,
       subject: `WebMaker from ${req.body.email} by ${req.body.name}`,
