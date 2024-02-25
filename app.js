@@ -20,7 +20,7 @@ app.use((req, res, next) => {
     next();
   });
 const corsOption = {
-    origin: ['http://127.0.0.1:3001'],
+    origin: ['http://127.0.0.1:3001',"https://webmaker-9smd.onrender.com"],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "DELETE"],
 }
@@ -28,6 +28,9 @@ app.use(cors(corsOption));
 app.use(cookieParser());
 
 app.use("/api/v1/users", userRouter);
+app.get("*", (req, res) => {
+  res.redirect(`${req.protocol}://${req.get("host")}`);
+});
 
 
 module.exports =app;
