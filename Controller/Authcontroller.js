@@ -430,6 +430,33 @@ exports.sendEmail = async (req, res) => {
     });
   }
 };
+
+exports.signupEmail = async (req, res) => {
+  try {
+    
+    await sendEmail({
+      email: req.body.email,
+      subject: `Sign up successfully on WebMaker Keep growing`,
+      message: `Welcome ${req.body.name}!
+
+      We're excited to embark on this journey with you and help bring your vision to life. 
+      Thank you for choosing us to create your unique and tailored website.
+
+      At WebMaker, we specialize in crafting custom websites that reflect your style, 
+      brand, and goals. Our team of expert designers and developers is dedicated to delivering
+       a seamless and personalized experience from start to finish. `,
+    });
+    res.status(200).json({
+      status: "success",
+      message: "",
+    });
+  } catch (err) {
+    res.status(200).json({
+      status: "failed",
+      message: "Enter valid email address",
+    });
+  }
+};
 exports.restrictTo = (...roles) => {
   //because arguments can not be passed to meddleware
   //so return a wrapper which is actual fucntion we want to create
