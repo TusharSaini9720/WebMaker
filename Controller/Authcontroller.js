@@ -4,7 +4,7 @@ const { promisify } = require("util");
 const sendEmail = require("./../utils/email");
 const crypto = require("crypto");
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = async(user, statusCode, res) => {
  // console.log("in createSendToken");
   const token = signToken(user._id);
  
@@ -21,12 +21,35 @@ const createSendToken = (user, statusCode, res) => {
   res.cookie("jwt", token, cookieOptions);
   //hide password even when creating new user though cookie is not saved
   user.password = undefined;
-  //console.log(res.headers);
-  res.status(statusCode).json({
-    status: "success",
-    token, 
-    data: { user: user },
-  });
+  console.log("res.headers");
+ 
+  try {
+    console.log("in email try block")
+    await sendEmail({
+      email: user.email,
+      subject: `Sign up successfully on WebMaker Keep growing`,
+      message: `Welcome ${user.name}!
+
+      We're excited to embark on this journey with you and help bring your vision to life. 
+      Thank you for choosing us to create your unique and tailored website.
+
+      At WebMaker, we specialize in crafting custom websites that reflect your style, 
+      brand, and goals. Our team of expert designers and developers is dedicated to delivering
+       a seamless and personalized experience from start to finish. `,
+    });
+    res.status(statusCode).json({
+      status: "success",
+      token, 
+      data: { user: user },
+    });
+  } catch (err) {
+    res.status(200).json({
+      status: "failed",
+      message: "Enter valid email address" +err,
+    });
+  }
+
+
 };
 
 const signToken = id => {
@@ -44,8 +67,7 @@ exports.signup = async (req, res) => {
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
     });
-    // console.log("newUser",newUser);
-   //  console.log("in signup");
+    
     createSendToken(newUser, 201, res);
   } catch (err) {
      //console.log("in err");
@@ -433,7 +455,6 @@ exports.sendEmail = async (req, res) => {
 
 exports.signupEmail = async (req, res) => {
   try {
-    
     await sendEmail({
       email: req.body.email,
       subject: `Sign up successfully on WebMaker Keep growing`,
@@ -448,7 +469,7 @@ exports.signupEmail = async (req, res) => {
     });
     res.status(200).json({
       status: "success",
-      message: "",
+      message: "send ",
     });
   } catch (err) {
     res.status(200).json({
